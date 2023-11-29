@@ -1,9 +1,23 @@
-void setup() {
-  // put your setup code here, to run once:
+// 포트 정해두기
 
+void setup() 
+{
+  //핀 입출력 설정
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop() 
+{
+
+  //현재 시간 가져오기
+
+  //차량 허가(아직 안해도됨)
+
+  //초음파 센서 작동
+
+  //모터 90도
+
+  //모터가 언제 내려갈지 정하고
+
+  //현재 시간을 저장하고 모터 원위치
 
 }
