@@ -7,7 +7,7 @@ import pymysql #mysql 모듈
 import serial #시리얼통신 모듈
 import pygame
 
-# 할때 변수 통일 포트 통일 등등등
+# 할때 변수 통일 포트 통일 등등
 
 # 주차자리 유무 판단해서 있으면 아래 코드 진행
 
