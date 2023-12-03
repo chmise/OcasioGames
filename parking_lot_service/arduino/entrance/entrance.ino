@@ -1,44 +1,59 @@
-// 포트 정해두기 //echo 13, trig 12
-#define echo 13 
-#define trig 12
+#include<Servo.h> 
+#define echo 12 
+#define trig 13
+
+Servo servo;  //Servo 클래스로 servo객체 생성
+int servoAngle = 0;  // 각도를 조절할 변수 servoAngle
+unsigned long timer;
+long duration, distance;
+boolean is_reached = false; // "Reached"를 이미 출력했는지를 확인하는 변수
+
 void setup() 
-{
-  //핀 입출력 설정
+{ //핀 입출력 설정
   Serial.begin(9600);
   pinMode(trig,OUTPUT);
   pinMode(echo,INPUT);
+  servo.attach(A5);
 }
 
 void loop() 
 {
-
   //현재 시간 가져오기
+  unsigned long currentMillis = millis();
 
-  //차량 허가(아직 안해도됨)
-
-  //초음파 센서 작동
-  Serial.print(read_ultrasonic());
-  Serial.println("[cm]");
-  delay(500);
-
-  //모터 90도
-
-  //모터가 언제 내려갈지 정하고
-
-  //현재 시간을 저장하고 모터 원위치
-
-}
-
-// 초음파 센서 함수(거리 계산)
-double read_ultrasonic(){
-  double return_time,howlong;
+  //차량 허가(나중에)
+  
+  //초음파 센서 시리얼통신
+  digitalWrite(trig, LOW);  
+  delayMicroseconds(2); 
   digitalWrite(trig, HIGH);
-  delay(5);
+  delayMicroseconds(10); 
   digitalWrite(trig, LOW);
-  return_time = pulseIn(echo, HIGH);
-  howlong = 340. * return_time / (2.*10000);
-  if (howlong > 99){
-  howlong = 99;
+  duration = pulseIn(echo, HIGH);
+  distance = (duration/2) / 29.1;
+  
+  if (distance < 10 && !is_reached) {  // 거리가 10 미만일 때
+    Serial.println("Reached");
+    is_reached = true; // "Reached"를 출력했음을 표시
+  } else if (distance >= 10 && is_reached) { // 거리가 다시 10 이상이 되었을 때
+    is_reached = false; // "Reached" 상태를 해제
   }
-  return howlong;
+
+  
+  //서보모터 90도
+  if(distance < 10){
+    servoAngle = 0;
+    servo.write(servoAngle);
+    timer = millis();
+    is_reached = true;
+  }
+
+  //서보모터 원상태
+  if(millis() - timer > 5000 && distance >= 20){
+    servoAngle = 90;
+    servo.write(servoAngle);
+    is_reached = false;
+  }
+
+  delay(500);
 }
